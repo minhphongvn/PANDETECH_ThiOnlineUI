@@ -9,8 +9,18 @@
               Danh sách học sinh
             </div>
           </div>
-          <v-spacer /><them-hoc-sinh @change="layThongTinLop"
-        /></v-card-title>
+          <v-spacer />
+          <verify-dialog
+            msg="Xác nhận xoá lớp này!"
+            iconsrc="mdi-delete"
+            class="mr-2"
+            color="grey"
+            icon
+          >
+            <v-btn color="error" text @click="deleteLop">Xoá lớp</v-btn>
+          </verify-dialog>
+          <them-hoc-sinh @change="layThongTinLop" />
+        </v-card-title>
         <v-divider></v-divider>
         <v-card-text class="text-start">
           <div>
@@ -34,6 +44,8 @@
               :search="search"
               no-data-text="Chưa có dữ liệu"
               no-results-text="Chưa có dữ liệu"
+              :loading="loading"
+              loading-text="Đang tải... vui lòng chờ!"
             ></v-data-table>
           </div>
         </v-card-text>
@@ -48,8 +60,9 @@
 <script>
 import ThemHocSinh from "./component/ThemHocSinh.vue";
 import lopApi from "../../api/lop.api";
+import VerifyDialog from "../../components/VerifyDialog.vue";
 export default {
-  components: { ThemHocSinh },
+  components: { ThemHocSinh, VerifyDialog },
   data: () => ({
     idLop: "",
     headers: [
@@ -59,17 +72,31 @@ export default {
     search: "",
     tenlop: "",
     danhsachhocsinh: [],
+    loading: false,
   }),
   methods: {
     async layThongTinLop() {
       try {
-        this.$store.commit("setLoading", true);
+        this.loading = true;
         const { data } = await lopApi.layThongTinLop(this.$route.params.id);
         this.danhsachhocsinh = data.danhsachhocsinh;
         this.tenlop = data.tenlop;
-        this.$store.commit("setLoading", false);
+        this.loading = false;
       } catch (error) {
         console.log(error);
+      }
+    },
+    async deleteLop() {
+      try {
+        this.loading = true;
+        await lopApi.xoaLop(this.$route.params.id);
+        this.$showAlert("Đã xoá thành công!", "success");
+        this.loading = false;
+        this.$router.go(-1);
+      } catch (error) {
+        if (error.response) {
+          this.$showAlert(error.response.data.error, "error");
+        }
       }
     },
   },

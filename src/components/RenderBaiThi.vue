@@ -115,11 +115,18 @@ export default {
     },
   },
   mounted() {
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
+    // document.addEventListener("visibilitychange", () => {
+    //   if (document.hidden) {
+    //     this.$router.replace({ name: "ViPham" });
+    //   }
+    // });
+    window.addEventListener(
+      "blur",
+      () => {
         this.$router.replace({ name: "ViPham" });
-      }
-    });
+      },
+      false
+    );
   },
   created() {
     this.dethi = {

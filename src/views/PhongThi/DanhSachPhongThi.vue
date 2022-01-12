@@ -30,6 +30,8 @@
                 :search="search"
                 no-data-text="Chưa có dữ liệu"
                 no-results-text="Chưa có dữ liệu"
+                :loading="loading"
+                loading-text="Đang tải... vui lòng chờ!"
               >
                 <template v-slot:item.ten="{ item }">
                   <span
@@ -113,9 +115,18 @@
                       v-model="item.id"
                       @done="layDanhSachPhongThi"
                     />
-                    <v-btn small color="error" class="mr-1" icon
-                      ><v-icon>mdi-delete</v-icon></v-btn
+                    <verify-dialog
+                      msg="Xác nhận xoá phòng thi này!"
+                      iconsrc="mdi-delete"
+                      small
+                      color="error"
+                      class="mr-1"
+                      icon
                     >
+                      <v-btn color="error" @click="deletePhongThi(item.id)" text
+                        >Xoá</v-btn
+                      >
+                    </verify-dialog>
                   </div>
                 </template>
               </v-data-table>
@@ -129,10 +140,11 @@
 
 <script>
 import phongthiApi from "../../api/phongthi.api";
+import VerifyDialog from "../../components/VerifyDialog.vue";
 import SuaPhongThi from "./component/SuaPhongThi.vue";
 import TaoPhongThi from "./component/TaoPhongThi.vue";
 export default {
-  components: { TaoPhongThi, SuaPhongThi },
+  components: { TaoPhongThi, SuaPhongThi, VerifyDialog },
   data: () => ({
     danhSachPhongThi: [],
     headers: [
@@ -146,16 +158,30 @@ export default {
       { text: "Công cụ", value: "tools" },
     ],
     search: "",
+    loading: false,
   }),
   methods: {
     async layDanhSachPhongThi() {
       try {
-        this.$store.commit("setLoading", true);
+        this.loading = true;
         const { data } = await phongthiApi.layDanhSach();
-        this.$store.commit("setLoading", false);
         this.danhSachPhongThi = data;
+        this.loading = false;
       } catch (error) {
         console.log(error);
+      }
+    },
+    async deletePhongThi(id) {
+      try {
+        this.loading = true;
+        await phongthiApi.xoaPhongThi(id);
+        this.$showAlert("Đã xoá thành công!", "success");
+        this.layDanhSachPhongThi();
+        this.loading = false;
+      } catch (error) {
+        if (error.response) {
+          this.$showAlert(error.response.data.error, "error");
+        }
       }
     },
   },

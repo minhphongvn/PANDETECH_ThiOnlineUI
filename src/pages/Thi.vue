@@ -115,6 +115,11 @@ export default {
     },
   }),
   methods: {
+    Verify() {
+      this.verify_dialog = true;
+
+      this.verify_dialog = false;
+    },
     async KiemTraTrangThai() {
       try {
         const { data } = await thiApi.KiemTraTrangThai(this.$route.params.id);

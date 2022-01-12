@@ -161,7 +161,6 @@ export default {
           phonenumber: this.user.phonenumber,
           noidung: JSON.stringify(this.dethi),
         };
-        console.log(body);
         const { data } = await dethiApi.TaoDeThi(body);
         this.$showAlert(data, "success");
         this.done();
@@ -170,7 +169,6 @@ export default {
           this.loading = false;
           this.$showAlert(error.response.data.error, "error");
         }
-        console.log(error);
       }
     },
   },

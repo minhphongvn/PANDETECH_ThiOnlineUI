@@ -1,7 +1,7 @@
 import axiosClient from './axiosClient';
 
 const lop = {
-  taoLop: ({tenlop, phonenumber,namhoc}) => {
+  taoLop: ({ tenlop, phonenumber, namhoc }) => {
     const url = '/api/lophoc/taoLop';
     return axiosClient.post(url, {
       tenlop,
@@ -15,13 +15,17 @@ const lop = {
   },
   themDanhSachHocSinh: (id, danhsach) => {
     const url = `/api/lophoc/ThemHocSinh/${id}`;
-    return axiosClient.post(url, {danhsach: JSON.stringify(danhsach)})
+    return axiosClient.post(url, { danhsach: JSON.stringify(danhsach) })
   },
   layThongTinLop: (id) => {
     const url = `/api/lophoc/ThongTinLop/${id}`;
     return axiosClient.get(url)
   },
-  
+  xoaLop: (id) => {
+    const url = `/api/lophoc/XoaLop/${id}`;
+    return axiosClient.post(url);
+  },
+
 }
 
 export default lop;

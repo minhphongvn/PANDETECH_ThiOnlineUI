@@ -17,6 +17,10 @@ const phongthiApi = {
     const url = `/api/phongthi/ThongTinPhongThi/${id}`;
     return axiosClient.get(url);
   },
+  xoaPhongThi: (id) => {
+    const url = `/api/phongthi/XoaPhongThi/${id}`;
+    return axiosClient.post(url);
+  },
 };
 
 export default phongthiApi;

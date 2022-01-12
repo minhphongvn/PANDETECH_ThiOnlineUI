@@ -30,16 +30,22 @@
                 :search="search"
                 no-data-text="Chưa có dữ liệu"
                 no-results-text="Chưa có dữ liệu"
+                :loading="loading"
+                loading-text="Đang tải... vui lòng chờ!"
               >
                 <template v-slot:item.ten="{ item }">
                   <span class="font-weight-medium">{{ item.ten }}</span>
                 </template>
-                <!-- <template v-slot:item.trangthai="{ item }">
-                  <span v-if="item.trangthai" class="success--text"
-                    >Xuất bản</span
-                  >
-                  <span v-else>Chưa xuất bản</span>
-                </template> -->
+                <template v-slot:item.tools="{}">
+                  <div class="d-flex justify-start align-center">
+                    <v-btn small color="warning" class="mr-1" icon
+                      ><v-icon>mdi-pencil</v-icon></v-btn
+                    >
+                    <v-btn small color="error" class="mr-1" icon
+                      ><v-icon>mdi-delete</v-icon></v-btn
+                    >
+                  </div>
+                </template>
                 <template v-slot:item.ngaytao="{ item }">
                   <span>{{ $moment(item.ngaytao).format("LLL") }}</span>
                 </template>
@@ -63,20 +69,23 @@ export default {
       { text: "Tên", value: "ten" },
       // { text: "Trạng thái", value: "trangthai" },
       { text: "Ngày tạo", value: "ngaytao" },
-      // { text: "Số lượt làm đề", value: "soluot" },
+      { text: "Công cụ", value: "tools" },
     ],
     search: "",
+    loading: false,
   }),
   methods: {
     async layDanhSachDeThi() {
       try {
-        this.$store.commit("setLoading", true);
-        console.log("layDanhSachDeThi");
+        this.loading = true;
         const { data } = await dethiApi.layDanhSach();
         this.danhSachDeThi = data;
-        this.$store.commit("setLoading", false);
+        this.loading = false;
       } catch (error) {
-        console.log(error);
+        if (error.response) {
+          this.loading = false;
+          this.$showAlert(error.response.data.error, "error");
+        }
       }
     },
   },

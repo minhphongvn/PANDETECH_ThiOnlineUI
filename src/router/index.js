@@ -76,6 +76,14 @@ const routes = [
       },
       {
         meta: {
+          title: "Quản lý phòng",
+        },
+        path: "phongthi/:id",
+        name: "xemphong",
+        component: () => import("../pages/XemPhongThi.vue"),
+      },
+      {
+        meta: {
           title: "Đề thi",
         },
         path: "dethi",
@@ -99,6 +107,30 @@ const routes = [
         component: () => import("../views/DanhSachLop/Lop.vue"),
       },
     ],
+    beforeEnter: (to, from, next) => {
+      let localStorageUserData = JSON.parse(localStorage.getItem("awt"));
+      store.commit("setToken", localStorageUserData);
+      store.commit("setUser", JSON.parse(localStorage.getItem("userInfo")));
+
+      instance.defaults.headers["awt"] = localStorageUserData;
+      if (!store.state.user.isAuthenticated) {
+        next({ name: "Login" });
+        return;
+      }
+      if (store.state.user.type === "hocsinh") {
+        next({ name: "HocSinh" });
+        return;
+      }
+      next();
+    },
+  },
+  {
+    meta: {
+      title: "Học sinh",
+    },
+    path: "/hocsinh",
+    name: "HocSinh",
+    component: () => import("../pages/HocSinh.vue"),
     beforeEnter: (to, from, next) => {
       let localStorageUserData = JSON.parse(localStorage.getItem("awt"));
       store.commit("setToken", localStorageUserData);
