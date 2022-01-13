@@ -13,6 +13,7 @@
           <div class="mt-3">
             <div v-for="(cauhoi, j) in part.questions" :id="cauhoi.id" :key="j">
               <cau-hoi
+                :readonly="readonly"
                 :cauhoi="part.questions[j]"
                 :position="j"
                 @change="checking"
@@ -28,7 +29,7 @@
 import CauHoi from "./CauHoi.vue";
 export default {
   components: { CauHoi },
-  props: ["value", "dethi", "check"],
+  props: ["value", "dethi", "check", "readonly"],
   data: () => ({
     baithi: null,
   }),
@@ -48,7 +49,6 @@ export default {
     if (this.dethi) {
       this.baithi = JSON.parse(JSON.stringify(this.dethi));
     }
-    console.log(this.check);
   },
 };
 </script>

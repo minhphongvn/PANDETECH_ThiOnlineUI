@@ -5,10 +5,10 @@
         <v-col cols="12" md="6">
           <v-card>
             <v-card-title class="justify-center error white--text">
-              Phát hiện vi phạm !
+              Bạn đã vi phạm quá mức cảnh cáo !
             </v-card-title>
             <v-card-text class="text-center text-body-1 pa-4">
-              <div>Đừng hoảng loạn! Bài thi đã được nộp!</div>
+              <div>Nhưng đừng hoảng loạn! Bài thi đã được lưu!</div>
               <div>
                 Nếu đây là lỗi. Hãy liên hệ với giáo viên để được trợ giúp!
               </div>

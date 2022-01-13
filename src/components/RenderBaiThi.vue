@@ -44,7 +44,10 @@
             />
           </div>
         </div>
-
+        <div class="pa-3" :class="solanvipham ? 'error--text' : ''">
+          Phát hiện vi phạm: {{ solanvipham }}
+        </div>
+        <v-divider></v-divider>
         <div class="pa-2">
           <div class="d-flex flex-wrap">
             <div
@@ -93,6 +96,7 @@ export default {
     checkDalam: [],
     dethi: {},
     bailam: {},
+    solanvipham: 0,
   }),
   methods: {
     async NopBai() {
@@ -123,10 +127,19 @@ export default {
     window.addEventListener(
       "blur",
       () => {
-        this.$router.replace({ name: "ViPham" });
+        this.solanvipham++;
       },
       false
     );
+  },
+  watch: {
+    solanvipham: async function () {
+      if (this.solanvipham === 3) {
+        await this.NopBai();
+        this.$router.replace({ name: "ViPham" });
+      }
+      return;
+    },
   },
   created() {
     this.dethi = {

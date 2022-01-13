@@ -85,11 +85,42 @@
       />
     </div>
     <div v-if="diem">
-      <div style="height: 100vh" class="d-flex justify-center align-center">
-        <div class="text-h1 font-weight-bold success--text">
-          {{ diem }} điểm
+      <div
+        style="height: 100vh"
+        class="d-flex flex-column justify-center align-center"
+      >
+        <div class="text-h5 font-weight-bold success--text text-center mb-5">
+          <v-icon class="mr-2" color="success">mdi-check-circle</v-icon
+          ><span>Bài thi đã được nộp </span>
+        </div>
+        <v-card v-if="diem" class="pa-5" flat outlined>
+          <v-card-text class="text-center">
+            <div class="text-h6 mb-5">Số câu đúng: {{ socaudung }}</div>
+            <div class="text-h3 font-weight-bold success--text">
+              {{ diem }} điểm
+            </div>
+          </v-card-text>
+          <v-card-actions class="justify-center">
+            <v-btn
+              href="#result"
+              color="primary"
+              @click="viewResult = true"
+              text
+              >Xem kết quả</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+        <div class="mt-5">
+          <v-btn to="/" color="grey" outlined icon
+            ><v-icon>mdi-arrow-left</v-icon></v-btn
+          >
         </div>
       </div>
+      <v-row v-if="degoc && viewResult" id="result" justify="center" no-gutters>
+        <v-col cols="12" md="6">
+          <bai-thi :dethi="JSON.parse(degoc)" :readonly="true" />
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
@@ -97,14 +128,17 @@
 <script>
 import thiApi from "../api/thi.api";
 import RenderBaiThi from "../components/RenderBaiThi.vue";
+import BaiThi from "../components/subcomponents/BaiThi.vue";
 export default {
-  components: { RenderBaiThi },
+  components: { RenderBaiThi, BaiThi },
   data: () => ({
     password: "",
     showInputPassword: false,
     dethi: null,
     thisinh: null,
     diem: 0,
+    socaudung: "",
+    viewResult: false,
     phongthi: {
       solanthi: 0,
       ten: "",
@@ -112,6 +146,7 @@ export default {
       ngaybatdau: "",
       ngayketthuc: "",
       danhsachthisinh: [],
+      degoc: null,
     },
   }),
   methods: {
@@ -172,6 +207,8 @@ export default {
     },
     getDone(data) {
       this.diem = data.diem;
+      this.socaudung = data.per;
+      this.degoc = data.degoc;
     },
   },
   computed: {
