@@ -34,13 +34,18 @@
                 loading-text="Đang tải... vui lòng chờ!"
               >
                 <template v-slot:item.ten="{ item }">
-                  <span class="font-weight-medium">{{ item.ten }}</span>
+                  <span
+                    class="font-weight-medium primary--text"
+                    style="cursor: pointer"
+                    @click="showDeThi(item.id)"
+                    >{{ item.ten }}</span
+                  >
                 </template>
                 <template v-slot:item.tools="{}">
                   <div class="d-flex justify-start align-center">
-                    <v-btn small color="warning" class="mr-1" icon
+                    <!-- <v-btn small color="warning" class="mr-1" icon
                       ><v-icon>mdi-pencil</v-icon></v-btn
-                    >
+                    > -->
                     <v-btn small color="error" class="mr-1" icon
                       ><v-icon>mdi-delete</v-icon></v-btn
                     >
@@ -55,14 +60,25 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog
+      v-if="dethi"
+      v-model="showBai"
+      :width="$vuetify.breakpoint.mobile ? '' : '50%'"
+      scrollable
+    >
+      <div class="white">
+        <bai-thi :dethi="JSON.parse(dethi.noidung)" :readonly="true" />
+      </div>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import TaoDeThi from "./component/TaoDeThi.vue";
 import dethiApi from "../../api/dethi.api";
+import BaiThi from "../../components/subcomponents/BaiThi.vue";
 export default {
-  components: { TaoDeThi },
+  components: { TaoDeThi, BaiThi },
   data: () => ({
     danhSachDeThi: [],
     headers: [
@@ -73,8 +89,25 @@ export default {
     ],
     search: "",
     loading: false,
+    dethi: null,
+    showBai: false,
   }),
   methods: {
+    async showDeThi(id) {
+      if (id === undefined) return;
+      try {
+        console.log(id);
+        this.$store.commit("setLoading", true);
+        const { data } = await dethiApi.layThongTinDeThi(id);
+        this.dethi = data;
+        this.$store.commit("setLoading", false);
+        this.showBai = true;
+      } catch (error) {
+        if (error.response) {
+          this.$showAlert(error.response.data.error, "error");
+        }
+      }
+    },
     async layDanhSachDeThi() {
       try {
         this.loading = true;
@@ -86,6 +119,13 @@ export default {
           this.loading = false;
           this.$showAlert(error.response.data.error, "error");
         }
+      }
+    },
+  },
+  watch: {
+    showBai() {
+      if (!this.showBai) {
+        this.dethi = null;
       }
     },
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-if="baithi" class="my-3" flat outlined>
+    <v-card v-if="baithi" class="py-3" flat outlined>
       <v-card-text class="text-center">
         <div class="text-h5 font-weight-medium">{{ baithi.title }}</div>
         <div class="text-body-1 font-weight-regular">

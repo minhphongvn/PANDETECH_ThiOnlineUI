@@ -57,6 +57,13 @@
             dense
           ></v-text-field>
           <v-switch
+            v-model="phongthi.batloi"
+            label="Bắt lỗi cảnh cáo"
+            class="mt-0 pt-0"
+            dense
+            inset
+          ></v-switch>
+          <v-switch
             v-model="phongthi.trangthai"
             label="Xuất bản"
             class="mt-0 pt-0"
@@ -124,6 +131,7 @@ export default {
       trangthai: false,
       danhsachthisinh: "",
       dethi: "",
+      batloi: false,
     },
     dsNamHoc: [],
     rules: {

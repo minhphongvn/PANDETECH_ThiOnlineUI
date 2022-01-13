@@ -186,7 +186,7 @@ export default {
     },
   },
   mounted() {
-    // setInterval(() => this.layDanhSachPhongThi(), 5000);
+    setInterval(() => this.layDanhSachPhongThi(), 10000);
   },
   created() {
     this.layDanhSachPhongThi();

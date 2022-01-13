@@ -57,6 +57,13 @@
             dense
           ></v-text-field>
           <v-switch
+            v-model="phongthi.batloi"
+            label="Bắt lỗi cảnh cáo"
+            class="mt-0 pt-0"
+            dense
+            inset
+          ></v-switch>
+          <v-switch
             v-model="phongthi.trangthai"
             :label="phongthi.trangthai ? 'Kỳ thi đã mở' : 'Kỳ thi đang đóng'"
             dense
@@ -103,6 +110,7 @@ export default {
       solanthi: 1,
       password: "",
       trangthai: false,
+      batloi: false,
     },
     dsNamHoc: [],
     rules: {

@@ -89,7 +89,7 @@ import BaiThi from "./subcomponents/BaiThi.vue";
 import thiApi from "../api/thi.api";
 export default {
   components: { CountDown, BaiThi },
-  props: ["password", "baithi", "time", "thisinh"],
+  props: ["password", "baithi", "time", "thisinh", "batloi"],
   data: () => ({
     loading: false,
     drawer: false,
@@ -97,17 +97,18 @@ export default {
     dethi: {},
     bailam: {},
     solanvipham: 0,
+    isNopbai: false,
   }),
   methods: {
     async NopBai() {
       try {
-        console.log(this.bailam);
         const body = {
           id: this.$route.params.id,
           phone: this.thisinh.phone,
           password: this.password,
           bainop: JSON.stringify(this.bailam),
         };
+        this.isNopbai = true;
         const { data } = await thiApi.NopBai(body);
         this.$emit("done", data);
         this.$showAlert("Đã nộp bài!", "success");
@@ -117,6 +118,25 @@ export default {
         }
       }
     },
+    async BatLoi() {
+      try {
+        const body = {
+          id: this.$route.params.id,
+          phone: this.thisinh.phone,
+          password: this.password,
+        };
+        const { data } = await thiApi.BatLoi(body);
+        this.$showAlert(data, "error");
+      } catch (error) {
+        if (error.response) {
+          this.$showAlert(error.response.data.error, "error");
+        }
+      }
+    },
+    handlingBatLoi() {
+      this.BatLoi();
+      this.solanvipham++;
+    },
   },
   mounted() {
     // document.addEventListener("visibilitychange", () => {
@@ -124,13 +144,9 @@ export default {
     //     this.$router.replace({ name: "ViPham" });
     //   }
     // });
-    window.addEventListener(
-      "blur",
-      () => {
-        this.solanvipham++;
-      },
-      false
-    );
+    if (this.batloi) {
+      window.addEventListener("blur", this.handlingBatLoi, false);
+    }
   },
   watch: {
     solanvipham: async function () {
@@ -140,8 +156,15 @@ export default {
       }
       return;
     },
+    isNopbai: function () {
+      console.log(this.isNopbai);
+      if (this.isNopbai == true) {
+        window.removeEventListener("blur", this.handlingBatLoi, false);
+      }
+    },
   },
   created() {
+    console.log(this.isNopbai);
     this.dethi = {
       ...this.baithi,
       part: this.baithi.part.map((part) => ({

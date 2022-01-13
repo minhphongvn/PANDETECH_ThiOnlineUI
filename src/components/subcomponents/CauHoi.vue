@@ -17,7 +17,7 @@
         <v-radio
           class="my-0 pb-3"
           :color="
-            $attrs.readonly === true
+            $attrs.readonly === true && cauhoi.correct
               ? cauhoi.correct === item.id
                 ? 'success'
                 : 'error'
@@ -30,7 +30,7 @@
         ></v-radio>
       </v-radio-group>
     </div>
-    <v-card-actions v-if="$attrs.readonly">
+    <v-card-actions v-if="$attrs.readonly && cauhoi.correct">
       <span
         ><span class="font-weight-medium"
           >Đáp án:

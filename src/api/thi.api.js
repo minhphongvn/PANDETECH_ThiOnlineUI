@@ -17,6 +17,10 @@ const thiApi = {
     const url = `/api/phongthi/NopBai`;
     return axiosClient.post(url, data);
   },
+  BatLoi: (data) => {
+    const url = `/api/phongthi/BatLoi`;
+    return axiosClient.post(url, data);
+  },
 };
 
 export default thiApi;

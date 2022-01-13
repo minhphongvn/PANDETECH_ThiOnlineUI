@@ -77,6 +77,7 @@
     </div>
     <div v-if="dethi && !diem">
       <render-bai-thi
+        :batloi="batloi"
         :password="password"
         :thisinh="thisinh"
         :baithi="dethi"
@@ -137,6 +138,7 @@ export default {
     dethi: null,
     thisinh: null,
     diem: 0,
+    batloi: false,
     socaudung: "",
     viewResult: false,
     phongthi: {
@@ -197,7 +199,7 @@ export default {
         this.thisinh = data.thisinh;
         console.log(this.thisinh);
         this.dethi = JSON.parse(data.dethi);
-        console.log(this.dethi);
+        this.batloi = data.batloi;
         this.$showAlert("Bắt đầu thi!", "success");
       } catch (error) {
         if (error.response) {
